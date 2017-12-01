@@ -31,9 +31,9 @@ def grudger():
 
 while round <= 10:
 	playerChoice = input("Cooperate? (Y/N): ")
-	if playerChoice == "y" or playerChoice == "Y":
+	if playerChoice.lower() == "y":
 		playerCooperate = True
-	if playerChoice == "n" or playerChoice == "N":
+	if playerChoice.lower() == "n":
 		playerCooperate = False
 
 	#change the function used to change behavior of the computer
