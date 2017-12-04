@@ -72,35 +72,26 @@ def oppositetft():
 # "p2": player
 # replace tft and player with the strategies you want to use
 
-# grudger
-# rand
-# player
-# tft
-# allcooperate
-# allnotcooperate
-# oppositetft
+# grudger - always cooperates until the other player does not cooperate, after that it will never cooperate again
+# rand - random, like a coin toss.
+# player - allows the user to input moves as Y or N
+# tft - Cooperates on the first round, then follows the other player's last move.
+# allcooperate - always cooperates.
+# allnotcooperate - never cooperates.
+# oppositetft - Does not cooperate on the first round, then does the opposite of the other player's last move.
 
 strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft]
 
 playermap = {
 
-	"p1": rand,
-	"p2": rand
+	"p1": allnotcooperate,
+	"p2": allnotcooperate
 
 }
 
-while round <= 10:
-
-	#change the function used to change behavior of player1
-
-
-	p1Cooperate = playermap["p1"]()
-
-	
-	#change the function used to change behavior of player2
-	p2Cooperate = playermap["p2"]()
-
-	#calculate scores
+def calcScores():
+	global p1Score
+	global p2Score
 	if p1Cooperate and p2Cooperate:
 		p1Score += 3
 		p2Score += 3
@@ -118,14 +109,24 @@ while round <= 10:
 		p1Score += 2
 		p2Score += 2
 
+while round <= 10:
+
+	#change the function used to change behavior of player1
+	p1Cooperate = playermap["p1"]()
+
+	#change the function used to change behavior of player2
+	p2Cooperate = playermap["p2"]()
+
+	calcScores()
+
 	print("")
 	print(playermap["p1"].__name__.title() + " (p1) Cooperated: " + str(p1Cooperate))
 	print(playermap["p2"].__name__.title() + " (p2) Cooperated: " + str(p2Cooperate) + "\n")
 
-	round += 1
 	print(playermap["p1"].__name__.title() + " (p1) Score: " + str(p1Score))
 	print(playermap["p2"].__name__.title() + " (p2) Score: " + str(p2Score) + "\n")
 
+	round += 1
 	firstRound = False
 
 	lastp1Cooperate = p1Cooperate
@@ -134,6 +135,6 @@ while round <= 10:
 if p1Score > p2Score:
 	print(playermap["p1"].__name__.title() + " (p1) won by " + str(p1Score - p2Score) + " points.")
 elif p1Score == p2Score:
-	print(playermap["p1"].__name__.title() + " (p1) tied with " + playermap["p2"].__name__)
+	print(playermap["p1"].__name__.title() + " (p1) tied with " + playermap["p2"].__name__ + "(p2)")
 else:
 	print(playermap["p2"].__name__.title() + " (p2) won by " + str(p2Score - p1Score) + " points.")
