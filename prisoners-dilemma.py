@@ -82,16 +82,26 @@ def oppositetft():
 
 strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft]
 
+
+#change the functions used to change behavior of player1 and player2
+
 playermap = {
 
-	"p1": allnotcooperate,
-	"p2": allnotcooperate
+	"p1": grudger,
+	"p2": player
 
 }
 
-def calcScores():
-	global p1Score
-	global p2Score
+
+	
+
+while round <= 10:
+	p1Cooperate = playermap["p1"]()
+
+	p2Cooperate = playermap["p2"]()
+
+	
+	#CALCULATE SCORES
 	if p1Cooperate and p2Cooperate:
 		p1Score += 3
 		p2Score += 3
@@ -108,16 +118,8 @@ def calcScores():
 	elif not p1Cooperate and not p2Cooperate:
 		p1Score += 2
 		p2Score += 2
-
-while round <= 10:
-
-	#change the function used to change behavior of player1
-	p1Cooperate = playermap["p1"]()
-
-	#change the function used to change behavior of player2
-	p2Cooperate = playermap["p2"]()
-
-	calcScores()
+		
+	#CALCULATE SCORES OVER
 
 	print("")
 	print(playermap["p1"].__name__.title() + " (p1) Cooperated: " + str(p1Cooperate))
