@@ -1,4 +1,5 @@
 import random
+import numpy
 
 firstRound = True
 
@@ -10,15 +11,21 @@ p2Score = 0
 
 global grudgerIsContent
 
-round = 1
+roundnumber = 1
+
+
 
 grudgerIsContent = True
 
-global lastp1Cooperate
-lastp1Cooperate = None
+global lastplayerCooperate
+lastplayerCooperate = None
 
 global lastp2Cooperate
 lastp2Cooperate = None
+
+global playerCooperateList
+playerCooperateList = []
+
 
 #each function outputs cooperate as True and not cooperate as False
 def allcooperate():
@@ -28,11 +35,16 @@ def allnotcooperate():
 	return False
 
 def rand():
+	#returns a random boolean (t/f)
 	return bool(random.getrandbits(1))
 
 def player():
+	#interperets player input
 	while True:
 		playerChoice = input("Cooperate? (Y/N): ")
+		if playerChoice.lower() == "pvp":
+			playermap["p2"] = player
+			continue
 		if playerChoice.lower() == "y" or playerChoice.lower() == "yes":
 			return True
 		if playerChoice.lower() == "n" or playerChoice.lower() == "no":
@@ -42,29 +54,25 @@ def player():
 			continue
 
 def grudger():
+	#uses variable grudgerIsContent
 	if grudgerIsContent:
 		return True
 	else:
 		return False
 
 def tft():
+	#uses variable lastplayerCooperate
 	if firstRound:
 		return True
 	else:
-		if playermap["p2"] == "tft":
-			return lastp1Cooperate
-		else:
-			return lastp2Cooperate
+		return playerCooperateList[-1]
 
 
 def oppositetft():
 	if firstRound:
 		return False
 	else:
-		if playermap["p2"] == "tft":
-			return not lastp1Cooperate
-		else:
-			return not lastp2Cooperate
+		return not playerCooperateList[-1]
 
 
 # Full list of strategies (input them like this)
@@ -79,6 +87,7 @@ def oppositetft():
 # allcooperate - always cooperates.
 # allnotcooperate - never cooperates.
 # oppositetft - Does not cooperate on the first round, then does the opposite of the other player's last move.
+# avg - calculates your average move. Then, does your average move.
 
 strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft]
 
@@ -87,20 +96,22 @@ strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft
 
 playermap = {
 
-	"p1": grudger,
-	"p2": player
+	"p1": player,
+	"p2": random.choice(strats)
 
 }
 
+while playermap["p2"] == player:
+	playermap["p2"] = random.choice(strats)
 
-	
 
-while round <= 10:
+
+while roundnumber <= 10:
 	p1Cooperate = playermap["p1"]()
 
 	p2Cooperate = playermap["p2"]()
 
-	
+
 	#CALCULATE SCORES
 	if p1Cooperate and p2Cooperate:
 		p1Score += 3
@@ -118,25 +129,29 @@ while round <= 10:
 	elif not p1Cooperate and not p2Cooperate:
 		p1Score += 2
 		p2Score += 2
-		
+
 	#CALCULATE SCORES OVER
 
 	print("")
-	print(playermap["p1"].__name__.title() + " (p1) Cooperated: " + str(p1Cooperate))
-	print(playermap["p2"].__name__.title() + " (p2) Cooperated: " + str(p2Cooperate) + "\n")
+	print("(p1) Cooperated: " + str(p1Cooperate))
+	print("(p2) Cooperated: " + str(p2Cooperate) + "\n")
 
-	print(playermap["p1"].__name__.title() + " (p1) Score: " + str(p1Score))
-	print(playermap["p2"].__name__.title() + " (p2) Score: " + str(p2Score) + "\n")
+	print("(p1) Score: " + str(p1Score))
+	print("(p2) Score: " + str(p2Score) + "\n")
 
-	round += 1
+	roundnumber += 1
 	firstRound = False
 
-	lastp1Cooperate = p1Cooperate
-	lastp2Cooperate = p2Cooperate
+	playerCooperateList.append(p1Cooperate)
+
 
 if p1Score > p2Score:
-	print(playermap["p1"].__name__.title() + " (p1) won by " + str(p1Score - p2Score) + " points.")
+	print("(p1) won by " + str(p1Score - p2Score) + " points.")
 elif p1Score == p2Score:
-	print(playermap["p1"].__name__.title() + " (p1) tied with " + playermap["p2"].__name__ + "(p2)")
+	print("(p1) tied with " + playermap["p2"].__name__ + "(p2)")
 else:
-	print(playermap["p2"].__name__.title() + " (p2) won by " + str(p2Score - p1Score) + " points.")
+	print("(p2) won by " + str(p2Score - p1Score) + " points.")
+
+print("You played against " + str(playermap["p2"].__name__) + ".")
+
+print(playerCooperateList)
