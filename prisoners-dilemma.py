@@ -1,19 +1,11 @@
 import random
 
-firstRound = True
+firstRound = True # set this to true, will change it back to false after run
 
-global p1Score
-global p2Score
-
-p1Score = 0
-p2Score = 0
+global p1Score, p2Score, roundnumber
+p1Score, p2Score, roundnumber = 0,0,1
 
 global grudgerIsContent
-
-roundnumber = 1
-
-
-
 grudgerIsContent = True
 
 global lastplayerCooperate
@@ -24,7 +16,6 @@ lastp2Cooperate = None
 
 global playerCooperateList
 playerCooperateList = []
-
 
 #each function outputs cooperate as True and not cooperate as False
 def allcooperate():
@@ -89,7 +80,6 @@ def oppositetft():
 
 strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft]
 
-
 #change the functions used to change behavior of player1 and player2
 
 playermap = {
@@ -102,13 +92,9 @@ playermap = {
 while playermap["p2"] == player:
 	playermap["p2"] = random.choice(strats)
 
-
-
 while roundnumber <= 10:
-	p1Cooperate = playermap["p1"]()
-
-	p2Cooperate = playermap["p2"]()
-
+	p1Cooperate = playermap["p1"]() #find the function name of p1 in playermap, call it
+	p2Cooperate = playermap["p2"]() #find the function name of p1 in playermap, call it
 
 	#CALCULATE SCORES
 	if p1Cooperate and p2Cooperate:
@@ -128,8 +114,7 @@ while roundnumber <= 10:
 		p1Score += 2
 		p2Score += 2
 
-	#CALCULATE SCORES OVER
-
+	#Print cooperate/not cooperate for each player
 	print("")
 	print("(p1) Cooperated: " + str(p1Cooperate))
 	print("(p2) Cooperated: " + str(p2Cooperate) + "\n")
@@ -137,17 +122,20 @@ while roundnumber <= 10:
 	print("(p1) Score: " + str(p1Score))
 	print("(p2) Score: " + str(p2Score) + "\n")
 
-	roundnumber += 1
-	firstRound = False
+	roundnumber += 1 #next round
+	firstRound = False #first round over, used for strategies like tft, oppositetft, and grudger
 
-	playerCooperateList.append(p1Cooperate)
+	playerCooperateList.append(p1Cooperate) #add the player's moves to the list
 
 
+
+#Determine the winner
 if p1Score > p2Score:
 	print("(p1) won by " + str(p1Score - p2Score) + " points.")
 elif p1Score == p2Score:
-	print("(p1) tied with " + playermap["p2"].__name__ + "(p2)")
+	print("(p1) tied with " + playermap["p2"].__name__ + " (p2)")
 else:
 	print("(p2) won by " + str(p2Score - p1Score) + " points.")
 
+#Tell them who they played against, wont really matter if computer player was chosen
 print("You played against " + str(playermap["p2"].__name__) + ".")
