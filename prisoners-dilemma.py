@@ -151,5 +151,3 @@ else:
 	print("(p2) won by " + str(p2Score - p1Score) + " points.")
 
 print("You played against " + str(playermap["p2"].__name__) + ".")
-
-print(playerCooperateList)
