@@ -1,5 +1,4 @@
 import random
-import numpy
 
 firstRound = True
 
@@ -87,7 +86,6 @@ def oppositetft():
 # allcooperate - always cooperates.
 # allnotcooperate - never cooperates.
 # oppositetft - Does not cooperate on the first round, then does the opposite of the other player's last move.
-# avg - calculates your average move. Then, does your average move.
 
 strats = [grudger, rand, player, tft, allcooperate, allnotcooperate, oppositetft]
 
